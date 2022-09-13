@@ -84,9 +84,12 @@ public class Partition implements Comparable<Partition> {
         return result;
     }
 
+
+
+
     @Override
     public int compareTo(Partition o) {
-        return Long.compare(lag, o.lag);
+        return Double.compare(arrivalRate, o.arrivalRate);
     }
 
     //TODO add corresponding windows for  lag rate (d/dt lag(t)), and a function to return its average etc...

@@ -223,6 +223,16 @@ public class PrometheusHttpClient  implements Runnable{
 
 
 
+
+
+
+
+
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
     public static void assignPartitionsFairly(
             final List<Consumer> assignment,
             final List<Consumer> consumers,
@@ -255,21 +265,9 @@ public class PrometheusHttpClient  implements Runnable{
             // Assign to the consumer with least number of partitions, then smallest total lag, then smallest id arrival rate
             // returns the consumer with lowest assigned partitions, if all assigned partitions equal returns the min total arrival rate
             final String memberId = Collections
-                    .min(consumerTotalArrivalRate.entrySet(), (c1, c2) -> {
-
-                        //TODO is that necessary partition count first... not really......
-                        //lowest number of partitions first.
-                        int comparePartitionCount = Integer.compare(consumerTotalPartitions.get(c1.getKey()),
-                                consumerTotalPartitions.get(c2.getKey()));
-
-                        // If partition count is equal, lowest total arrival rate first, get the consumer with the lowest arrival rate
-                        int compareTotalArrivalRate = Double.compare(c1.getValue(), c2.getValue());
-                        if (compareTotalArrivalRate != 0) {
-                            return compareTotalArrivalRate;
-                        }
-                        // If total arrival rate  is equal, lowest consumer id first
-                        return c1.getKey().compareTo(c2.getKey());
-                    }).getKey();
+                    .min(consumerTotalArrivalRate.entrySet(), (c1, c2) ->
+                            Double.compare(c1.getValue(), c2.getValue())!=0?
+                            Double.compare(c1.getValue(), c2.getValue()): c1.getKey().compareTo(c2.getKey())).getKey();
 
             int memberIndex;
             for( memberIndex = 0; memberIndex<consumers.size(); memberIndex++) {
@@ -289,16 +287,6 @@ public class PrometheusHttpClient  implements Runnable{
                     consumerTotalArrivalRate.get(memberId));
         }
     }
-
-
-
-
-
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
 
 
 

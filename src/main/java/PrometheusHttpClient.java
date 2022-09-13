@@ -246,11 +246,10 @@ public class PrometheusHttpClient  implements Runnable{
         for (Consumer cons : consumers) {
             consumerTotalArrivalRate.put(cons.getId(), 0.0);
             consumerAllowableArrivalRate.put(cons.getId(), 95.0);
-        }
-        // Track total number of partitions assigned to each consumer (for the current topic)
-        for (Consumer cons : consumers) {
             consumerTotalPartitions.put(cons.getId(), 0);
+
         }
+
         // might want to remove, the partitions are sorted anyway.
         //First fit decreasing
         partitionsArrivalRate.sort((p1, p2) -> {
